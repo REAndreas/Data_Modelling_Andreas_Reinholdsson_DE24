@@ -58,3 +58,36 @@ A)
 
 B)
 <img src = "../../Assets/6.Onshop.png">
+
+## 7. Theory question
+
+A)
+    För att ge en enkel överblick hur man vill lägga upp databasens struktur
+
+B)
+    It's not a good idea, because then you have to change the data every year, better to stor date of birth
+
+C)
+    Structural data = organised in defined schemas
+    Semi structural data = partly organised data lite json data that doesnt fit in a table
+    unstructured data = lacks a predefined structure, files like pictures, sound and video
+
+D)
+    Structural data = business data like excel sheets or databases
+    Semi structural data = API:es
+    unstructured data = spotify, youtube and instagram
+
+E)
+    Describes the connection between entitys in a databas
+    one to many, many to many, many to one, one to one
+
+F)
+    figure out business rules
+    set up entitys and relationships
+    create a Conceptual model
+    create a logical model
+    create a physical model
+
+G)
+    RDBMS fits better for structured data banking, healthcare systems
+    NOSQL better for semi structured data or unstructured like IOT or social media
