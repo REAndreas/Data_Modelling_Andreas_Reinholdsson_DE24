@@ -171,3 +171,5 @@ cython_debug/
 .pypirc
 
 .VScode
+.dbeaver
+.project

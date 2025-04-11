@@ -1,0 +1,206 @@
+Table skola{
+  skol_id SERIAL [primary key]
+  adress_id integer [not null, ref: - adress.adress_id]
+  skolnamn VARCHAR(50) [not null]
+}
+ 
+Table adress{
+  adress_id SERIAL [primary key]
+  stad_id integer [not null, ref: > stad.stad_id]
+  gatuadress varchar(100) [not null]
+  postnummer varchar(6) [not null]
+}
+ 
+Table stad{
+  stad_id SERIAL [primary key]
+  stad VARCHAR(50) [not null]
+}
+ 
+Table student{
+  student_id serial [primary key]
+  pu_id INTEGER [not null, ref: - person_uppgifter.pu_id]
+  skol_id integer [not null, ref: > skola.skol_id]
+  f_namn varchar(50) [not null]
+  e_namn varchar(100) [not null]
+  epost varchar(255) [not null]
+  telefon varchar(15) [not null]
+}
+ 
+Table fristående_kurs{
+  fk_id serial [primary key]
+  skol_id integer [ref: > skola.skol_id]
+  kurskod integer [ref: > kurs.kurskod]
+  personal_id integer [ref: < personal.personal_id]
+}
+ 
+Table fristående_student{
+  fk_id integer [not null, ref: > fristående_kurs.fk_id]
+  student_id INTEGER [ref: > student.student_id]
+  indexes {
+    (fk_id, student_id) [pk]
+  }
+}
+ 
+Table klass{
+  klass_id Serial [primary key]
+  bo_id integer [not null, ref: > beviljade_omgångar.bo_id]
+  personal_id integer [not null, ref: > personal.personal_id]
+  skol_id integer [not null, ref: > skola.skol_id]
+}
+ 
+Table antagen_student{
+  klass_id integer [not null, ref: > klass.klass_id]
+  student_id integer [not null, ref: > student.student_id]
+  indexes {
+    (klass_id, student_id) [pk]
+  }
+}
+ 
+Table person_uppgifter{
+  adress_id integer [not null, ref: > adress.adress_id]
+  pu_id SERIAL [primary key]
+  personnummer char(12) [not null]
+}
+ 
+Table beviljade_omgångar{
+  bo_id serial [primary key]
+  program_id varchar(10) [not null, ref: > program.program_id]
+  år varchar(2) [not null]
+}
+ 
+Table program{
+  program_id varchar(10) [primary key]
+  programnamn VARCHAR(50) [not null]
+}
+ 
+Table skolprogram{
+  skol_id INTEGER [not null, ref: > skola.skol_id]
+  program_id varchar(10) [not null, ref: > program.program_id]
+  indexes {
+    (skol_id, program_id) [pk]
+  }
+}
+ 
+ 
+Table kursprogram{
+  kurskod INTEGER [not null, ref: > kurs.kurskod]
+  program_id varchar(10) [not null, ref: > program.program_id]
+  indexes {
+    (kurskod, program_id) [pk]
+  }
+}
+ 
+Table kurs{
+  kurskod varchar(10) [primary key]
+  kursnamn VARCHAR(50) [not null]
+  poäng integer [not null]
+  beskrivning varchar(255)
+}
+ 
+Table kursbetyg{
+  student_id INTEGER [not null, ref: > student.student_id]
+  kurskod INTEGER [not null, ref: > kurs.kurskod]
+  betyg varchar(3) [not null]
+  indexes {
+    (student_id, kurskod) [pk]
+  }
+}
+ 
+Table ledningsgrupp{
+  ledningsgrupp_id SERIAL [primary key]
+  program_id varchar(10) [not null, ref: > program.program_id]
+  skol_id integer [not null, ref: > skola.skol_id]
+}
+ 
+Table ledningsföretag{
+  ledningsgrupp_id integer [not null, ref: > ledningsgrupp.ledningsgrupp_id]
+  företag_org_nummer varchar(11) [not null, ref: > företag.företag_org_nummer]
+  indexes {
+    (ledningsgrupp_id, företag_org_nummer) [pk]
+  }
+}
+ 
+Table ledningstudent{
+  ledningsgrupp_id integer [not null, ref: > ledningsgrupp.ledningsgrupp_id]
+  student_id INTEGER [not null, ref: > student.student_id]
+  indexes {
+    (ledningsgrupp_id, student_id) [pk]
+  }
+}
+ 
+Table protokoll{
+  ledningsgrupp_id integer [not null, ref: > ledningsgrupp.ledningsgrupp_id]
+  protokoll_id serial [primary key]
+  protokoll varchar(100000) [not null]
+  datum date [not null]
+}
+ 
+Table ledningspersonal{
+  ledningsgrupp_id integer [not null, ref: > ledningsgrupp.ledningsgrupp_id]
+  personal_id INTEGER [not null, ref: > personal.personal_id]
+  indexes {
+    (ledningsgrupp_id, personal_id) [pk]
+  }
+}
+ 
+Table företag{
+  företag_org_nummer varchar(11) [primary key]
+  företag_namn varchar(100) [not null]
+  representant varchar(50) [not null]
+  epost varchar(255) [not null]
+  telefon varchar(15) [not null]
+}
+ 
+Table personal{
+  personal_id INTEGER [primary key]
+  yrkes_id integer [not null, ref: > yrkesroll.yrkes_id]
+  f_namn varchar(50) [not null]
+  e_namn varchar(100) [not null]
+  epost varchar(255) [not null]
+  telefon varchar(15) [not null]
+}
+ 
+Table kurstillfälle{
+  personal_id integer [not null, ref: > personal.personal_id]
+  kurskod INTEGER [not null, ref: > kurs.kurskod]
+  indexes {
+    (personal_id, kurskod) [pk]
+  }
+}
+ 
+Table skolpersonal{
+  personal_id integer [not null, ref: > personal.personal_id]
+  skol_id integer [not null, ref: > skola.skol_id]
+  indexes {
+    (personal_id, skol_id) [pk]
+  }
+}
+ 
+Table yrkesroll{
+  yrkes_id SERIAL [primary key]
+  titel VARCHAR (50) [not null]
+}
+ 
+Table konsult{
+  konsult_org_nummer varchar(11) [not null, ref: > konsultbolag.konsult_org_nummer]
+  personal_id integer [not null, ref: > personal.personal_id]
+  timpris float [not null]
+  indexes {
+    (konsult_org_nummer, personal_id) [pk]
+  }
+}
+ 
+Table konsultbolag{
+  konsult_org_nummer varchar(11) [primary key]
+  adress_id integer [not null, ref: > adress.adress_id]
+  bolagsnamn varchar(100) [not null]
+  f_skatt bool [not null]
+}
+ 
+Table fastanställda{
+  pu_id INTEGER [not null, ref: - person_uppgifter.pu_id]
+  personal_id integer [not null, ref: > personal.personal_id]
+  indexes {
+    (pu_id, personal_id) [pk]
+  }
+}
